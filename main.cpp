@@ -36,8 +36,16 @@ int main()
     /** This holds (x+1), which we'll pass to each polynomial */
     std::vector<std::pair<power, coeff>> poly_input = {{1,1}, {0,1}};
 
+
     polynomial p1(poly_input.begin(), poly_input.end());
     polynomial p2(poly_input.begin(), poly_input.end());
+
+    // std::vector<std::pair<power, coeff>> vec = p1.canonical_form();
+
+    // for (auto i : vec) {
+    //     std::cout << i.first << " " << i.second << std::endl;
+    // }
+    // std::cout << (vec == poly_input) << std::endl;
 
     std::optional<double> result = poly_test(p1, p2, solution);
 

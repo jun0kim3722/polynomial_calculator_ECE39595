@@ -2,14 +2,21 @@
 #define POLY_H
 
 #include <vector>
+#include <map>
 #include <utility>
 #include <cstddef>
 
 using power = size_t;
 using coeff = int;
 
+#include <iostream>
+
 class polynomial
 {
+
+private:
+    std::map<power, coeff> coeff_map;
+    power degree = 0;
 
 public:
     /**
@@ -29,7 +36,20 @@ public:
      *  The end of the container to copy elements from
      */
     template <typename Iter>
-    polynomial(Iter begin, Iter end);
+    polynomial(Iter begin, Iter end) {
+        Iter i = begin;
+        while (i != end) {
+            coeff_map[i -> first] = i -> second;
+            degree = std::max(i -> first, degree);
+            i++;
+        }
+
+        for (power p = 0; p <= degree; ++p) {
+            if (coeff_map.find(p) == coeff_map.end()) {
+                coeff_map[p] = 0;
+            }
+        }
+    };
 
     /**
      * @brief Construct a new polynomial object from an existing polynomial object
@@ -76,7 +96,18 @@ public:
      * Modulo (%) should support
      * 1. polynomial % polynomial
      */
-    
+
+    polynomial operator+(const polynomial &other);
+
+    polynomial operator+(const int val);
+
+    polynomial operator*(const polynomial &other);
+
+    polynomial operator*(const int val);
+
+    polynomial operator%(const polynomial &other);
+
+    // polynomial &operator%(const polynomial &other);
 
     /**
      * @brief Returns the degree of the polynomial
@@ -108,5 +139,9 @@ public:
      */
     std::vector<std::pair<power, coeff>> canonical_form() const;
 };
+
+polynomial operator+(const int val, const polynomial& other);
+
+polynomial operator*(const int val, const polynomial& other);
 
 #endif
