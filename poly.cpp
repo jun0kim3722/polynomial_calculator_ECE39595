@@ -18,7 +18,7 @@ polynomial &polynomial::operator=(const polynomial &other) {
     return *this;
 }
 
-polynomial polynomial::operator+(const polynomial &other) {
+polynomial polynomial::operator+(const polynomial &other) const {
     polynomial result(other);
     power max_degree = std::max(degree, other.degree);
     result.degree = max_degree;
@@ -30,7 +30,7 @@ polynomial polynomial::operator+(const polynomial &other) {
     return result;
 }
 
-polynomial polynomial::operator+(const int val) {
+polynomial polynomial::operator+(const int val) const {
     polynomial result(*this);
     result.coeff_map[0] += val;
 
@@ -42,7 +42,7 @@ polynomial operator+(const int val, const polynomial &other) {
     return temp + val;
 }
 
-polynomial polynomial::operator*(const polynomial &other) {
+polynomial polynomial::operator*(const polynomial &other) const {
     polynomial result;
     for (const auto& [power1, coeff1] : coeff_map) {
         for (const auto& [power2, coeff2] : other.coeff_map) {
@@ -57,7 +57,7 @@ polynomial polynomial::operator*(const polynomial &other) {
     return result;
 }
 
-polynomial polynomial::operator*(const int val) {
+polynomial polynomial::operator*(const int val) const {
     polynomial result(*this);
 
     for (const auto& [p, c] : result.coeff_map) {
@@ -72,7 +72,7 @@ polynomial operator*(const int val, const polynomial &other) {
     return temp * val;
 }
 
-polynomial polynomial::operator%(const polynomial &other) {
+polynomial polynomial::operator%(const polynomial &other) const {
     if (other.degree > degree) {
         return *this;
     }
