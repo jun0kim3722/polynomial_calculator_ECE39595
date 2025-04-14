@@ -57,4 +57,23 @@ int main()
     {
         std::cout << "Failed test" << std::endl;
     }
+
+    std::vector<std::pair<power, coeff>> dividend_terms = {{2, 1}, {1, 2}, {0, 1}};
+    std::vector<std::pair<power, coeff>> divisor_terms = {{1, 1}, {0, 1}};
+    std::vector<std::pair<power, coeff>> expected_remainder = {{0, 0}};
+
+    polynomial dividend(dividend_terms.begin(), dividend_terms.end());
+    polynomial divisor(divisor_terms.begin(), divisor_terms.end());
+
+    polynomial remainder = dividend % divisor;
+
+    auto result_modulo = remainder.canonical_form();
+
+    remainder.print();
+
+    if (result_modulo == expected_remainder) {
+        std::cout << "Modulo test passed." << std::endl;
+    } else {
+        std::cout << "Modulo test failed." << std::endl;
+    }
 }
