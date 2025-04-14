@@ -1,3 +1,4 @@
+
 #include "poly.h"
 
 polynomial::polynomial() {
@@ -131,29 +132,27 @@ size_t polynomial::find_degree_of() {
 }
 
 std::vector<std::pair<power, coeff>> polynomial::canonical_form() const {
-    if (degree == 0) {
-        return {std::make_pair(0, coeff_map.at(0))};
+    std::vector<std::pair<power, coeff>> result;
+
+    for (const auto& [p, c] : coeff_map) {
+        if (c != 0) {
+            result.emplace_back(p, c);
+        }
     }
 
-    std::vector<std::pair<power, coeff>> result;
-    for (const auto& [p, c] : coeff_map) {
-        if (c > 0) {
-            result.push_back(std::make_pair(p, c));
-        }
+    if (result.empty()) {
+        return {std::make_pair(0, 0)};
     }
 
     for (size_t i = 1; i < result.size(); ++i) {
-        std::pair<power, coeff> new_pair = result[i];
+        auto key = result[i];
         size_t j = i;
-    
-        while (j > 0 && result[j - 1].first < new_pair.first) {
+        while (j > 0 && result[j - 1].first < key.first) {
             result[j] = result[j - 1];
             --j;
         }
-    
-        result[j] = new_pair;
+        result[j] = key;
     }
 
     return result;
 }
-
