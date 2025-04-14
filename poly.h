@@ -97,15 +97,15 @@ public:
      * 1. polynomial % polynomial
      */
 
-    polynomial operator+(const polynomial &other);
+    polynomial operator+(const polynomial &other) const;
 
-    polynomial operator+(const int val);
+    polynomial operator+(const int val) const;
 
-    polynomial operator*(const polynomial &other);
+    polynomial operator*(const polynomial &other) const;
 
-    polynomial operator*(const int val);
+    polynomial operator*(const int val) const;
 
-    polynomial operator%(const polynomial &other);
+    polynomial operator%(const polynomial &other) const;
 
     // polynomial &operator%(const polynomial &other);
 
