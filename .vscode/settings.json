@@ -50,6 +50,7 @@
         "typeinfo": "cpp",
         "bit": "cpp",
         "map": "cpp",
-        "dd": "cpp"
+        "dd": "cpp",
+        "list": "cpp"
     }
 }

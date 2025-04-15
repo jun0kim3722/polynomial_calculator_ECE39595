@@ -43,6 +43,8 @@ polynomial operator+(const int val, const polynomial &other) {
     return temp + val;
 }
 
+// void 
+
 polynomial polynomial::operator*(const polynomial &other) const {
     polynomial result;
     for (const auto& [power1, coeff1] : coeff_map) {

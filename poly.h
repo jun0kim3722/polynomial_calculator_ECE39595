@@ -39,15 +39,9 @@ public:
     polynomial(Iter begin, Iter end) {
         Iter i = begin;
         while (i != end) {
-            coeff_map[i -> first] = i -> second;
+            coeff_map[i -> first] += i -> second;
             degree = std::max(i -> first, degree);
             i++;
-        }
-
-        for (power p = 0; p <= degree; ++p) {
-            if (coeff_map.find(p) == coeff_map.end()) {
-                coeff_map[p] = 0;
-            }
         }
     };
 
