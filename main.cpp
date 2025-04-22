@@ -116,10 +116,6 @@ int main() {
     polynomial p1(poly1_terms.begin(), poly1_terms.end());
     polynomial p2(poly2_terms.begin(), poly2_terms.end());
     
-    // Report polynomial sizes
-    std::cout << "Polynomial 1: " << poly1_terms.size() << " terms\n";
-    std::cout << "Polynomial 2: " << poly2_terms.size() << " terms\n";
-    
     // Time the multiplication
     auto start = std::chrono::high_resolution_clock::now();
     polynomial product = p1 * p2;
