@@ -51,6 +51,10 @@
         "bit": "cpp",
         "map": "cpp",
         "dd": "cpp",
+<<<<<<< HEAD
         "variant": "cpp"
+=======
+        "list": "cpp"
+>>>>>>> f162992e9c65136ff3e29621723a8ccccd4db066
     }
 }

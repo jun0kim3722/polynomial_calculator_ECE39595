@@ -42,6 +42,8 @@ polynomial operator+(const int val, const polynomial &other) {
     return temp + val;
 }
 
+// void 
+
 void polynomial::multiply_range(const polynomial& other, 
                                std::map<power, coeff>& result_map,
                                std::mutex& result_mutex,
