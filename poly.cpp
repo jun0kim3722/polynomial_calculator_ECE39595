@@ -42,82 +42,98 @@ polynomial operator+(const int val, const polynomial &other) {
     return temp + val;
 }
 
-// void 
+// // void 
 
-void polynomial::multiply_range(const polynomial& other, 
-                               std::map<power, coeff>& result_map,
-                               std::mutex& result_mutex,
-                               size_t start, 
-                               size_t end,
-                               const std::vector<std::pair<power, coeff>>& coeffs1) const {
+// void polynomial::multiply_range(const polynomial& other, 
+//                                std::map<power, coeff>& result_map,
+//                                std::mutex& result_mutex,
+//                                size_t start, 
+//                                size_t end,
+//                                const std::vector<std::pair<power, coeff>>& coeffs1) const {
 
-    std::map<power, coeff> local_result;
+//     std::map<power, coeff> local_result;
     
-    for (size_t i = start; i < end && i < coeffs1.size(); ++i) {
-        const auto& [power1, coeff1] = coeffs1[i];
+//     for (size_t i = start; i < end && i < coeffs1.size(); ++i) {
+//         const auto& [power1, coeff1] = coeffs1[i];
         
-        for (const auto& [power2, coeff2] : other.coeff_map) {
-            power new_power = power1 + power2;
-            coeff new_coeff = coeff1 * coeff2;
+//         for (const auto& [power2, coeff2] : other.coeff_map) {
+//             power new_power = power1 + power2;
+//             coeff new_coeff = coeff1 * coeff2;
             
-            local_result[new_power] += new_coeff;
-        }
-    }
-    std::lock_guard<std::mutex> lock(result_mutex);
-    for (const auto& [p, c] : local_result) {
-        result_map[p] += c;
-    }
-}
+//             local_result[new_power] += new_coeff;
+//         }
+//     }
+//     std::lock_guard<std::mutex> lock(result_mutex);
+//     for (const auto& [p, c] : local_result) {
+//         result_map[p] += c;
+//     }
+// }
+
+// polynomial polynomial::operator*(const polynomial &other) const {
+//     if (coeff_map.empty() || other.coeff_map.empty()) {
+//         polynomial result;
+//         return result;
+//     }
+//     polynomial result;
+//     std::mutex result_mutex;
+//     std::vector<std::thread> threads;
+    
+//     std::vector<std::pair<power, coeff>> coeffs1;
+//     for (const auto& term : coeff_map) {
+//         coeffs1.push_back(term);
+//     }
+//     size_t chunk_size = (coeffs1.size() + NUM_THREADS - 1) / NUM_THREADS;
+    
+//     for (size_t i = 0; i < NUM_THREADS; ++i) {
+//         size_t start = i * chunk_size;
+//         size_t end = std::min(start + chunk_size, coeffs1.size());
+        
+//         if (start >= coeffs1.size()) break;
+        
+//         threads.emplace_back(&polynomial::multiply_range, this, 
+//                             std::ref(other), 
+//                             std::ref(result.coeff_map), 
+//                             std::ref(result_mutex),
+//                             start, end, std::ref(coeffs1));
+//     }
+    
+//     for (auto& thread : threads) {
+//         if (thread.joinable()) {
+//             thread.join();
+//         }
+//     }
+    
+//     for (auto it = result.coeff_map.begin(); it != result.coeff_map.end();) {
+//         if (it->second == 0) {
+//             it = result.coeff_map.erase(it);
+//         } else {
+//             ++it;
+//         }
+//     }
+    
+//     result.degree = 0;
+//     for (const auto& [p, c] : result.coeff_map) {
+//         if (c != 0) {
+//             result.degree = std::max(result.degree, p);
+//         }
+//     }
+    
+//     return result;
+// }
+
 
 polynomial polynomial::operator*(const polynomial &other) const {
-    if (coeff_map.empty() || other.coeff_map.empty()) {
-        polynomial result;
-        return result;
-    }
     polynomial result;
-    std::mutex result_mutex;
-    std::vector<std::thread> threads;
-    
-    std::vector<std::pair<power, coeff>> coeffs1;
-    for (const auto& term : coeff_map) {
-        coeffs1.push_back(term);
-    }
-    size_t chunk_size = (coeffs1.size() + NUM_THREADS - 1) / NUM_THREADS;
-    
-    for (size_t i = 0; i < NUM_THREADS; ++i) {
-        size_t start = i * chunk_size;
-        size_t end = std::min(start + chunk_size, coeffs1.size());
-        
-        if (start >= coeffs1.size()) break;
-        
-        threads.emplace_back(&polynomial::multiply_range, this, 
-                            std::ref(other), 
-                            std::ref(result.coeff_map), 
-                            std::ref(result_mutex),
-                            start, end, std::ref(coeffs1));
-    }
-    
-    for (auto& thread : threads) {
-        if (thread.joinable()) {
-            thread.join();
+    for (const auto& [power1, coeff1] : coeff_map) {
+        for (const auto& [power2, coeff2] : other.coeff_map) {
+            power new_power = power1 + power2;
+            int new_coeff = coeff1 * coeff2;
+
+            result.coeff_map[new_power] += new_coeff;
+            result.degree = std::max(new_power, result.degree);
         }
     }
-    
-    for (auto it = result.coeff_map.begin(); it != result.coeff_map.end();) {
-        if (it->second == 0) {
-            it = result.coeff_map.erase(it);
-        } else {
-            ++it;
-        }
-    }
-    
-    result.degree = 0;
-    for (const auto& [p, c] : result.coeff_map) {
-        if (c != 0) {
-            result.degree = std::max(result.degree, p);
-        }
-    }
-    
+
     return result;
 }
 
