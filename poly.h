@@ -12,9 +12,7 @@
 using power = size_t;
 using coeff = int;
 
-// Number of threads to use for polynomial operations
-const size_t NUM_THREADS = std::thread::hardware_concurrency() > 0 ? 
-                          std::thread::hardware_concurrency() : 4;
+const size_t NUM_THREADS = std::thread::hardware_concurrency() ? std::thread::hardware_concurrency() : 1;
 
 class polynomial
 {
@@ -22,7 +20,6 @@ private:
     std::map<power, coeff> coeff_map;
     power degree = 0;
 
-    // Helper function for parallel multiplication
     void multiply_range(const polynomial& other, 
                        std::map<power, coeff>& result_map,
                        std::mutex& result_mutex,
