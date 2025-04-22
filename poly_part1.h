@@ -5,30 +5,18 @@
 #include <map>
 #include <utility>
 #include <cstddef>
-#include <iostream>
-#include <thread>
-#include <mutex>
 
 using power = size_t;
 using coeff = int;
 
-// Number of threads to use for polynomial operations
-const size_t NUM_THREADS = std::thread::hardware_concurrency() > 0 ? 
-                          std::thread::hardware_concurrency() : 4;
+#include <iostream>
 
 class polynomial
 {
+
 private:
     std::map<power, coeff> coeff_map;
     power degree = 0;
-
-    // Helper function for parallel multiplication
-    void multiply_range(const polynomial& other, 
-                       std::map<power, coeff>& result_map,
-                       std::mutex& result_mutex,
-                       size_t start, 
-                       size_t end,
-                       const std::vector<std::pair<power, coeff>>& coeffs1) const;
 
 public:
     /**
@@ -51,9 +39,15 @@ public:
     polynomial(Iter begin, Iter end) {
         Iter i = begin;
         while (i != end) {
-            coeff_map[i -> first] += i -> second;
+            coeff_map[i -> first] = i -> second;
             degree = std::max(i -> first, degree);
             i++;
+        }
+
+        for (power p = 0; p <= degree; ++p) {
+            if (coeff_map.find(p) == coeff_map.end()) {
+                coeff_map[p] = 0;
+            }
         }
     };
 
@@ -112,6 +106,8 @@ public:
     polynomial operator*(const int val) const;
 
     polynomial operator%(const polynomial &other) const;
+
+    // polynomial &operator%(const polynomial &other);
 
     /**
      * @brief Returns the degree of the polynomial
