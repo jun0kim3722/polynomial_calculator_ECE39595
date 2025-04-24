@@ -8,11 +8,14 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
+#include <cmath>
+#include <complex>
 
 using power = size_t;
 using coeff = int;
 
 const size_t NUM_THREADS = std::thread::hardware_concurrency() ? std::thread::hardware_concurrency() : 1;
+const double PI = acos(-1);
 
 class polynomial
 {
@@ -110,6 +113,8 @@ public:
 
     polynomial operator%(const polynomial &other) const;
 
+    bool is_sparse(double threshold = 0.2) const;
+
     /**
      * @brief Returns the degree of the polynomial
      *
@@ -144,5 +149,9 @@ public:
 polynomial operator+(const int val, const polynomial& other);
 
 polynomial operator*(const int val, const polynomial& other);
+
+void fft(std::vector<std::complex<double>> &a, bool is_invert);
+
+std::vector<std::complex<double>> convert2complex(const std::map<power, coeff> &m, size_t size);
 
 #endif
