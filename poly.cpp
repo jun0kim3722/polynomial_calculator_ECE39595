@@ -81,6 +81,7 @@ std::vector<std::complex<double>> convert2complex(const std::map<power, coeff> &
 
 bool polynomial::is_sparse(double threshold) const {
     if (degree == 0) return true;
+    if (coeff_map.size() < 100) return true; 
     double density = static_cast<double>(coeff_map.size()) / (degree + 1);
     return density < threshold;
 }
@@ -245,6 +246,16 @@ void polynomial::print() const {
 }
 
 size_t polynomial::find_degree_of() {
+    for (auto i = coeff_map.rbegin(); i != coeff_map.rend(); i++) {
+        power p = i -> first;
+        coeff c = i -> second;
+
+        if (c != 0) {
+            degree = p;
+            break;
+        }
+    }
+    // degree = coeff_map.rbegin() -> first;
     return degree;
 }
 
