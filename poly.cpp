@@ -97,10 +97,9 @@ polynomial polynomial::operator*(const polynomial &other) const {
                 int new_coeff = coeff1 * coeff2;
     
                 result.coeff_map[new_power] += new_coeff;
-                result.degree = std::max(new_power, result.degree);
             }
         }
-    
+        result.degree = result.coeff_map.rbegin() -> first;
         return result;
     }
 
@@ -127,20 +126,27 @@ polynomial polynomial::operator*(const polynomial &other) const {
     fft(C, true); // inverse
 
     std::map<power, coeff> result_map;
-    power max_deg = 0;
 
     for (size_t i = 0; i <= sum_deg; ++i) {
         // int val = std::round(C[i].real());
-        int val = (std::abs(C[i].real()) < 1e-3) ? 0 : std::round(C[i].real());
+        // int val = (std::abs(C[i].real()) < 1e-3) ? 0 : std::round(C[i].real());
+        double d_val = static_cast<int64_t>(std::round(C[i].real()));
+        int val;
+        if (d_val > 2147483647 || d_val < -2147483647) {
+            val = static_cast<int32_t>(d_val);
+        }
+        else {
+            val = static_cast<coeff>(d_val);
+        }
+
         if (val != 0) {
             result_map[i] = val;
-            max_deg = std::max(max_deg, i);
         }
     }
 
     polynomial result;
     result.coeff_map = std::move(result_map);
-    result.degree = max_deg;
+    result.degree = result.coeff_map.rbegin() -> first;
     return result;
 }
 
@@ -245,7 +251,9 @@ size_t polynomial::find_degree_of() {
 std::vector<std::pair<power, coeff>> polynomial::canonical_form() const {
     std::vector<std::pair<power, coeff>> result;
 
-    for (const auto& [p, c] : coeff_map) {
+    for (auto i = coeff_map.rbegin(); i != coeff_map.rend(); i++) {
+        power p = i -> first;
+        coeff c = i -> second;
         if (c != 0) {
             result.emplace_back(p, c);
         }
@@ -253,16 +261,6 @@ std::vector<std::pair<power, coeff>> polynomial::canonical_form() const {
 
     if (result.empty()) {
         return {std::make_pair(0, 0)};
-    }
-
-    for (size_t i = 1; i < result.size(); ++i) {
-        auto key = result[i];
-        size_t j = i;
-        while (j > 0 && result[j - 1].first < key.first) {
-            result[j] = result[j - 1];
-            --j;
-        }
-        result[j] = key;
     }
 
     return result;

@@ -300,19 +300,18 @@ void read_txt(std::string input_file, std::string expected_file) {
 int main()
 {
     // given_test();
-    // read_txt("simple_poly.txt", "result.txt");
+    read_txt("simple_poly.txt", "result.txt");
 
-    std::vector<std::pair<power, coeff>> solution = {{2,1}, {1,2}, {0,1}};
+    // std::vector<std::pair<power, coeff>> solution = {{2,1}, {1,2}, {0,1}};
+    // std::vector<std::pair<power, coeff>> poly_input = {{0, 100}, {1, 5}, {50, 3}};
 
-    std::vector<std::pair<power, coeff>> poly_input = {{0, 100}, {1, 5}, {50, 3}};
 
-
-    polynomial A(poly_input.begin(), poly_input.end());
-    polynomial B(poly_input.begin(), poly_input.end());
-    polynomial C = A * B;
+    // polynomial A(poly_input.begin(), poly_input.end());
+    // polynomial B(poly_input.begin(), poly_input.end());
+    // polynomial C = A * B;
 
     // Should be: 1 + 2x^500 + x^1000
-    C.print();  // Or check canonical form
+    // C.print();  // Or check canonical form
 
     // std::vector<std::pair<power, coeff>> terms;
     // for (int i = 0; i <= 999; ++i) {
